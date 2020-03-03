@@ -93,6 +93,11 @@ export default {
           // 成功 之后打印结果
           // 把钥匙放在兜里 也就是把token存于 本地缓存
           window.localStorage.setItem('user-token', result.data.data.token)
+          // 跳转到主页
+          this.$router.push('/home')
+        }).catch(() => {
+          // 提示消息
+          this.$message.error('用户名或者密码错误')
         })
       })
     }
