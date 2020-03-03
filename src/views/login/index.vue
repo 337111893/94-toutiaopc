@@ -74,13 +74,27 @@ export default {
     login () {
       //  this.$refs.loginForm 获取的就是el-form的对象实例
       // 第一种 回调函数 isOK, fields(没有校验通过的字段)
-      this.$refs.loginForm.validate(function (isOK) {
-        if (isOK) {
-          console.log('校验通过')
-        } else {
-          console.log('校验未通过')
-        }
-      }) // 方法
+      // this.$refs.loginForm.validate(function (isOK) {
+      //   if (isOK) {
+      //     console.log('校验通过')
+      //   } else {
+      //     console.log('校验未通过')
+      //   }
+      // }) // 方法
+      // 第二种方法
+      this.$refs.loginForm.validate().then(() => {
+        // 如果成功通过 校验就会到达 then
+        // 通过校验之后 应该做什么事 -> 应该调用登录接口 看看手机号是否正常
+        this.$axios({
+          url: '/authorizations', // 请求地址
+          data: this.loginForm,
+          method: 'post'
+        }).then(result => {
+          // 成功 之后打印结果
+          // 把钥匙放在兜里 也就是把token存于 本地缓存
+          window.localStorage.setItem('user-token', result.data.data.token)
+        })
+      })
     }
   }
 }
