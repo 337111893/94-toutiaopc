@@ -23,14 +23,10 @@
 </template>
 
 <script>
-// 将左侧导航左键引入全局
-import LayoutAside from '@/components/home/layout-aside.vue'
-import LayoutHeader from '@/components/home/layout-header.vue'
+// 已将左边和头部自己的组件全局注册
+
 export default {
-  components: {
-    'layout-aside': LayoutAside,
-    'layout-header': LayoutHeader
-  }
+
 }
 </script>
 
