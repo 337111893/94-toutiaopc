@@ -56,10 +56,10 @@ export default {
   created () {
     //   获取用户的个人信息
     this.$axios({
-      url: '/user/profile'// 请求地址
+      url: '/user/profile' // 请求地址
     }).then(result => {
       // 如果加载成功了 我们要将数据赋值给 userInfo
-      this.userInfo = result.data.data
+      this.userInfo = result.data
     })
   }
 }
