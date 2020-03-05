@@ -30,12 +30,7 @@ axios.interceptors.response.use(function (response) {
 }, function (error) {
   // 失败的时候执行
   // error是错误对象 里面包含了错误的状态码 和响应信息
-  // 401 状态码  表示用户认证失败 用户身份不对
-  // 401出现的时候 表示 拿错钥匙/钥匙过期/钥匙没拿/钥匙名不对/钥匙格式不对 ...
-  // 之前的导航守卫  校验了token有没有 检查了钥匙有没有
-  // 应该换一个新钥匙 项目1 讲一种比较粗暴的换钥匙 项目2 讲一种比较温柔的钥匙
-  // 粗暴的换钥匙 回登录页 => 重新登录换一把新的 重来
-  // 回登录页之前 应该把旧钥匙给清除掉
+
   if (error.response.status === 401) {
     localStorage.removeItem('user-token') // 删除钥匙
     router.push('/login') // 直接导入路由实例对象 使用跳转方式 和组件中this.$router是一样的
