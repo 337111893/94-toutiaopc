@@ -26,6 +26,6 @@ export default {
   /* calc 计算的意思 */
   height: calc(100vh - 60px);
   background-size: cover;
-  background-image: url("http://img2.imgtn.bdimg.com/it/u=2785932284,2599924006&fm=26&gp=0.jpg");
+  /* background-image: url("http://img2.imgtn.bdimg.com/it/u=2785932284,2599924006&fm=26&gp=0.jpg"); */
 }
 </style>
