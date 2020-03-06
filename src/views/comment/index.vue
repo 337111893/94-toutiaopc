@@ -18,8 +18,14 @@
        <el-table-column  prop="total_comment_count" label="总评论数"></el-table-column>
        <el-table-column prop="fans_comment_count" label="粉丝评论数"></el-table-column>
        <el-table-column  label="操作">
-           <el-button size="small" type='text'>修改</el-button>
-           <el-button size="small" type='text'>关闭评论</el-button>
+           <!-- el-table-column组件 在插槽中传出了 row $index store column -->
+          <!-- 插槽 -> 作用域插槽 ->子组件中的数据 通过插槽传出 slot-scope接收  row(行数据) $index(索引)  -->
+          <!-- 可以放组件 -->
+          <template slot-scope="obj">
+            <el-button size="small" type='text'>修改</el-button>
+             <!-- 文本内容要根据 当前行里面的评论状态决定显示还是隐藏 -->
+            <el-button  size="small" type='text'>{{ obj.row.comment_status ? '关闭' : '打开'}}评论</el-button>
+            </template>
        </el-table-column>
     </el-table>
  </el-card>

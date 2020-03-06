@@ -30,5 +30,7 @@ export default {
 </script>
 
 <style>
-
+.el-aside{
+  background-color: #2e2f32;
+}
 </style>
