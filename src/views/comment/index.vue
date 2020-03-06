@@ -30,7 +30,9 @@ export default {
   data () {
     return {
       list: [
-
+        // { id: 1, name: '北京', date: '123456' },
+        // { id: 1, name: '北京', date: '123456' },
+        // { id: 1, name: '北京', date: '123456' }
       ]
     }
   },
@@ -46,6 +48,8 @@ export default {
         // params 传get参数也就是query参数
         // data   传body参数也就是请求体参数
       }).then(result => {
+        // console.log(result)
+
         //  将返回结果的中 数组 给list
         this.list = result.data.results
       })
@@ -59,6 +63,10 @@ export default {
       // 该函数需要返回一个值 用来显示
       return cellValue ? '正常' : '关闭'
     }
+  },
+  created () {
+    //   在钩子函数中 直接获取数据
+    this.getComment()
   }
 }
 </script>

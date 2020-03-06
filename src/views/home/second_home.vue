@@ -15,10 +15,6 @@ export default {
   data () {
     return {
       list: [
-        'http://img2.imgtn.bdimg.com/it/u=2785932284,2599924006&fm=26&gp=0.jpg',
-        'http://img0.imgtn.bdimg.com/it/u=3143086120,207801152&fm=26&gp=0.jpg',
-        'http://img5.imgtn.bdimg.com/it/u=3388941488,2735432575&fm=26&gp=0.jpg',
-        'http://img5.imgtn.bdimg.com/it/u=1522119016,74832853&fm=26&gp=0.jpg'
       ]
     }
   }
