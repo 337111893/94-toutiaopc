@@ -90,7 +90,7 @@ export default {
         pageSize: 3 // 每页多少条
       },
       dialogVisible: false, // 控制显示隐藏
-      clickIndex: -1 // 点击的索引
+      clickIndex: -1 // 先随便定义一个属性，就是数字类型，后边还赋值，取多少无所谓
     }
   },
   methods: {
