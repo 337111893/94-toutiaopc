@@ -26,7 +26,11 @@
 
 <script>
 export default {
-
+  data () {
+    return {
+      activeName: 'all' // 当前激活的页签 默认选中全部素材
+    }
+  }
 }
 </script>
 
