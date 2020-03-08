@@ -30,12 +30,13 @@
            </el-form-item>
            <el-form-item label="日期范围:">
              <!-- 日期范围选择组件  要设置type属性为 daterange-->
-             <el-date-picker type='daterange' v-model="searchForm.dateRange"></el-date-picker>
+             <!-- value-format是绑定值的格式 -->
+             <el-date-picker type='daterange' value-format="yyyy-MM-dd" v-model="searchForm.dateRange"></el-date-picker>
            </el-form-item>
         </el-form>
         <!-- 文章的主体结构 flex布局  -->
       <el-row class='total' type='flex' align="middle">
-         <span>共找到1000条符合条件的内容</span>
+         <span>共找到{{listzongshu}}条符合条件的内容</span>
       </el-row>
       <!-- 列表内容 -->
       <!-- article-item 作为一个循环项 -->
@@ -77,7 +78,19 @@ export default {
       },
       channels: [], // 专门来接收频道的数据
       list: [], // 定义list数据接收文章列表
+      listzongshu: [], // 获取文章总数
       defaultImg: require('../../assets/img/xiaohei.jpg') // 地址对应的文件变成了变量 在编译的时候会被拷贝到对应位置
+    }
+  },
+  // 监听data中的数据变化  第二种解决方案  watch监听对象的深度检测方案
+  watch: {
+    searchForm: {
+      deep: true, // 固定写法 表示 会深度检测searchForm中的数据变化
+      // handler也是一个固定写法 一旦数据发生任何变化 就会触发 更新
+      handler () {
+        //  统一调用改变条件的 方法
+        this.changeCondition() // this 指向当前组件实例
+      }
     }
   },
   // 专门处理显示格式的
@@ -112,6 +125,20 @@ export default {
     }
   },
   methods: {
+    // 改变了条件
+    changeCondition () {
+      // 当触发此方法的时候 表单数据已经变成最新的了
+      // 组装条件 params
+      const params = {
+        // 文章状态，0-草稿，1-待审核，2-审核通过，3-审核失败，4-已删除，不传为全部
+        status: this.searchForm.status === 5 ? null : this.searchForm.status, // 5 是我们前端虚构的
+        channel_id: this.searchForm.channel_id, // 就是表单的数据
+        begin_pubdate: this.searchForm.dateRange && this.searchForm.dateRange.length ? this.searchForm.dateRange[0] : null,
+        end_pubdate: this.searchForm.dateRange && this.searchForm.dateRange.length > 1 ? this.searchForm.dateRange[1] : null
+      }
+      // 通过接口传入
+      this.getArticles(params) // 直接调用获取方法
+    },
     // 获取频道数据
     getChannels () {
       this.$axios({
@@ -122,11 +149,13 @@ export default {
       })
     },
     // 获取文章列表
-    getArticles () {
+    getArticles (params) {
       this.$axios({
-        url: '/articles' // 请求地址
+        url: '/articles', // 请求地址
+        params // es6写法
       }).then(result => {
         this.list = result.data.results // 获取文章列表
+        this.listzongshu = result.data.total_count // 获取文章总数
       })
     }
   },
