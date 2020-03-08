@@ -36,7 +36,7 @@
         </el-form>
         <!-- 文章的主体结构 flex布局  -->
       <el-row class='total' type='flex' align="middle">
-         <span>共找到{{listzongshu}}条符合条件的内容</span>
+         <span>共找到{{page.total}}条符合条件的内容</span>
       </el-row>
       <!-- 列表内容 -->
       <!-- article-item 作为一个循环项 -->
@@ -61,6 +61,17 @@
           <span><i class="el-icon-delete"></i> 删除</span>
         </div>
       </div>
+      <!-- 放置分页组件 -->
+       <el-row type='flex' justify="center" style='height:80px' align="middle">
+             <!-- 分页组件 -->
+             <el-pagination
+              :current-page="page.currentPage"
+              :page-size="page.pageSize"
+              :total="page.total"
+              @current-change="changePage"
+               background  layout='prev,pager,next'>
+             </el-pagination>
+       </el-row>
     </el-card>
 </template>
 
@@ -68,6 +79,12 @@
 export default {
   data () {
     return {
+      page: {
+        currentPage: 1, // 当前页码
+        pageSize: 10, // 接口要求每页 10-50条之间
+        total: 0 // 总数
+      },
+      // 定义一个表单数据对象
       searchForm: {
         // 数据
         // 文章状态，0-草稿，1-待审核，2-审核通过，3-审核失败，4-已删除，不传为全部 / 先将 5 定义成 全部
@@ -78,7 +95,6 @@ export default {
       },
       channels: [], // 专门来接收频道的数据
       list: [], // 定义list数据接收文章列表
-      listzongshu: [], // 获取文章总数
       defaultImg: require('../../assets/img/xiaohei.jpg') // 地址对应的文件变成了变量 在编译的时候会被拷贝到对应位置
     }
   },
@@ -89,6 +105,7 @@ export default {
       // handler也是一个固定写法 一旦数据发生任何变化 就会触发 更新
       handler () {
         //  统一调用改变条件的 方法
+        this.page.currentPage = 1 // 只要条件变化 就变成第一页
         this.changeCondition() // this 指向当前组件实例
       }
     }
@@ -125,11 +142,19 @@ export default {
     }
   },
   methods: {
+    // 改变页码事件
+    changePage (newPage) {
+      // 先将最新的页码给到 当前页码
+      this.page.currentPage = newPage // 最新页码
+      this.changeCondition() // 直接调用改变事件的方法
+    },
     // 改变了条件
     changeCondition () {
       // 当触发此方法的时候 表单数据已经变成最新的了
       // 组装条件 params
       const params = {
+        page: this.page.currentPage, // 如果条件改变 就回到第一页
+        per_page: this.page.pageSize,
         // 文章状态，0-草稿，1-待审核，2-审核通过，3-审核失败，4-已删除，不传为全部
         status: this.searchForm.status === 5 ? null : this.searchForm.status, // 5 是我们前端虚构的
         channel_id: this.searchForm.channel_id, // 就是表单的数据
@@ -154,8 +179,10 @@ export default {
         url: '/articles', // 请求地址
         params // es6写法
       }).then(result => {
+        // 将总数赋值给total
+        this.page.total = result.data.total_count // 总数
         this.list = result.data.results // 获取文章列表
-        this.listzongshu = result.data.total_count // 获取文章总数
+        // this.listzongshu = result.data.total_count // 获取左上角文章总数
       })
     }
   },
