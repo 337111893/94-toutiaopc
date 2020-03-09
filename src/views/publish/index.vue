@@ -67,6 +67,15 @@ export default {
     }
   },
   methods: {
+    // 根据id获取文章详情数据
+    getArticleById (id) {
+      //  获取数据
+      this.$axios({
+        url: `/articles/${id}` // 请求地址
+      }).then(result => {
+        this.publishForm = result.data // 将数据赋值给表单数据
+      })
+    },
     // 获取频道数据
     getChannels () {
       this.$axios({
@@ -79,19 +88,21 @@ export default {
     publish (draft) {
       //  this.$refs 来获取 el-form实例  调用validate方法
       this.$refs.myForm.validate().then(() => {
-        // 如果进了then 表示校验成功
-        // 调用发布接口
+        const { articleId } = this.$route.params // 如果id 不为空 就是修改 如果为空就是发布新文章
+        //  发布正式文章 发布草稿文章
+        //  修改正式文章  修改草稿文章
         this.$axios({
-          method: 'post',
-          url: '/articles', // 请求地址
-          params: { draft }, // query参数
-          data: this.publishForm // 请求体body参数
+          url: articleId ? `/articles/${articleId}` : '/articles', // 根据场景决定用什么地址
+          method: articleId ? 'put' : 'post', // 根据场景决定用什么类型
+          params: {
+            draft
+          },
+          data: this.publishForm
         }).then(() => {
-          this.$message.success('发布成功!')
-          // 如果发布成功
+          this.$message.success('操作成功!')
           this.$router.push('/home/articles') // 跳到文章列表
         }).catch(() => {
-          this.$message.error('发布失败!')
+          this.$message.error('操作失败!')
         })
       })
     }
@@ -99,6 +110,12 @@ export default {
   created () {
     // 调用获取频道数据的方法
     this.getChannels()
+    const { articleId } = this.$route.params // articleId是 路由参数中定义的
+    // if (articleId) {
+    //   // 获取文章数据
+    //   this.getArticleById(articleId)
+    // }
+    articleId && this.getArticleById(articleId) // && 运算符 如果前面为true 才会执行后面的逻辑
   }
 }
 
