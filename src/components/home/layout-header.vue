@@ -4,7 +4,7 @@
       <!-- 等分为两列  为什么是:span="12"-->
     <el-col class='left' :span="12">
        <!-- 图标 -->
-       <i class='el-icon-s-fold'></i>
+       <i @click="collapse=!collapse" :class="{'el-icon-s-fold': !collapse, 'el-icon-s-unfold': collapse }"></i>
        <span>
            江苏传智播客教育科技股份有限公司
        </span>
@@ -36,7 +36,15 @@ import eventBus from '@/utils/eventBus'
 export default {
   data () {
     return {
-      userInfo: {} // 用户个人信息
+      userInfo: {}, // 用户个人信息
+      collapse: false // 开始不是折叠的
+    }
+  },
+  // 监听data中的数据变化
+  watch: {
+    collapse () {
+      // 此时说明 折叠状态变了  通知左侧导航组件
+      eventBus.$emit('changeCollapse') // 触发一个改变折叠状态的事件
     }
   },
   methods: {

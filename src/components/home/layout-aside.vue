@@ -2,10 +2,12 @@
   <div class="latout-aside">
       <!-- 头部图片 -->
       <div class="title">
-        <img src="../../assets/img/logo_admin.png" alt="">
+            <!-- 如果img是动态的 你需要把地址转变成变量 -->
+         <!-- 如果是折叠 用小图 如果是展开 用大图 -->
+        <img :src="collapse ? smallImg : bigImg" alt="">
       </div>
       <!-- 导航菜单 -->
-      <el-menu router background-color ="#353b4e" text-color="#adafb5">
+      <el-menu :collapse="collapse" router background-color ="#353b4e" text-color="#adafb5">
           <!-- 首页 1级-->
           <el-menu-item index='/home'>
               <i class="el-icon-thumb"></i>
@@ -47,22 +49,28 @@
 
 <script>
 export default {
-
+  props: ['collapse'], // 接收父组件传出来的变量
+  data () {
+    return {
+      bigImg: require('../../assets/img/logo_admin.png'),
+      smallImg: require('../../assets/img/toutiao.png')
+    }
+  }
 }
 </script>
 
 <style lang="less" scoped>
 .latout-aside{
     background-color: #323745;
-    width: 200px;
+    // width: 230px;
     height: 100vh;
     .title{
         background-color: #2e2f32;
         text-align: center;
-        padding: 15px 0;
+        padding: 10px 0;
         img {
-            width: 120px;
-        }
+              height: 35px;
+          }
     }
     // 菜单栏右侧有个小边框格格不入
     .el-menu{
