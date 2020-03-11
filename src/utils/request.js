@@ -15,7 +15,6 @@ axios.defaults.transformResponse = [function (data) {
   // 需要判断是否为空
 
   // const result = JSONBig.parse(data)
-  // debugger
   // return result
   return data ? JSONBig.parse(data) : {}
 }]
