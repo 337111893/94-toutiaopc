@@ -78,6 +78,7 @@
 </template>
 
 <script>
+import { getChannels } from '@/api/channels'
 export default {
   data () {
     return {
@@ -191,13 +192,10 @@ export default {
       this.getArticles(params) // 直接调用获取方法
     },
     // 获取频道数据
-    getChannels () {
-      this.$axios({
-        url: '/channels'
-      }).then(result => {
-        // 获取频道接口返回的数据
-        this.channels = result.data.channels
-      })
+    async getChannels () {
+      const result = await getChannels()
+      // 获取频道接口返回的数据
+      this.channels = result.data.channels
     },
     // 获取文章列表
     getArticles (params) {

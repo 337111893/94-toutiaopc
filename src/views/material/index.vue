@@ -79,6 +79,7 @@
 </template>
 
 <script>
+import { getMaterial } from '@/api/material'
 export default {
   data () {
     return {
@@ -164,21 +165,16 @@ export default {
       this.getMaterial() // 获取数据
     },
     //   获取素材数据
-    getMaterial () {
-      this.$axios({
-        url: '/user/images', // 请求地址
-        params: {
-          collect: this.activeName === 'collect', //  这个位置应该变活 根据当前的页签变活   activeName === 'all' 获取所有的素材  activeName = 'collect' 获取收藏素材
-          page: this.page.currentPage, // 取页码变量中的值 因为只要页码变量一变 获取的数据跟着变
-          per_page: this.page.pageSize // 获取每页数量
-        }, // get参数 也就是query参数
-        data: {} // data参数 放的是body参数
-      }).then(result => {
-        // 将返回的数据 赋值到data中的数据
-        this.list = result.data.results
-        // 将总条数赋值给total变量
-        this.page.total = result.data.total_count // 总数  全部素材的总数  收藏素材的总数 总数 跟随 当前页签变化而变化
+    async getMaterial () {
+      const result = await getMaterial({
+        collect: this.activeName === 'collect', //  这个位置应该变活 根据当前的页签变活   activeName === 'all' 获取所有的素材  activeName = 'collect' 获取收藏素材
+        page: this.page.currentPage, // 取页码变量中的值 因为只要页码变量一变 获取的数据跟着变
+        per_page: this.page.pageSize // 获取每页数量
       })
+      // 将返回的数据 赋值到data中的数据
+      this.list = result.data.results
+      // 将总条数赋值给total变量
+      this.page.total = result.data.total_count // 总数  全部素材的总数  收藏素材的总数 总数 跟随 当前页签变化而变化
     },
     // 切换页签事件
     changeTab () {
